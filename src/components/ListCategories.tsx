@@ -1,0 +1,41 @@
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
+import { useQuery } from "react-query";
+import { categoryAtom } from "../atom";
+import pb from "../pb";
+import { Category } from "../types";
+
+const ListCategories = () => {
+  const setCategory = useSetAtom(categoryAtom);
+  const { data } = useQuery("categories", () =>
+    pb.collection("categories").getFullList<Category>({ sort: "name" })
+  );
+  const selectCategory = (c: Category) => {
+    setCategory(c);
+  };
+
+  useEffect(() => {
+    if (data) setCategory(data[0]);
+  }, []);
+
+  return (
+    <div className="sticky">
+      <h2 className="font-bold">Categories</h2>
+      <div className=" mt-2 flex flex-row gap-2 w-full overflow-x-scroll p-2">
+        {data?.map((c) => (
+          <button
+            id={c.id}
+            className="btn btn-outline rounded-lg"
+            onClick={() => {
+              selectCategory(c);
+            }}
+          >
+            {c.name}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ListCategories;
