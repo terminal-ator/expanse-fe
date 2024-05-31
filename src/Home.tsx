@@ -22,12 +22,12 @@ function Home() {
   }, []);
 
   return (
-    <>
-      <h3>Wholesale & Distibutors</h3>
+    <div className="p-2">
+      <h3 className="text-lg ">Buy products at wholesale price</h3>
 
       <ListCategories />
       <ListProducts />
-    </>
+    </div>
   );
 }
 

@@ -7,7 +7,7 @@ import ProfilePage from "./Profile";
 
 function App() {
   return (
-    <>
+    <div className="w-full">
       <NavBar />
       <Switch>
         <Route path="/" component={Home} />
@@ -15,7 +15,7 @@ function App() {
         <Route path="/login" component={LoginPage} />
         <Route path="/profile" component={ProfilePage} />
       </Switch>
-    </>
+    </div>
   );
 }
 

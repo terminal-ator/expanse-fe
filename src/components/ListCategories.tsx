@@ -19,13 +19,12 @@ const ListCategories = () => {
   }, []);
 
   return (
-    <div className="sticky">
-      <h2 className="font-bold">Categories</h2>
+    <div className="sticky top-0">
       <div className=" mt-2 flex flex-row gap-2 w-full overflow-x-scroll p-2">
         {data?.map((c) => (
           <button
             id={c.id}
-            className="btn btn-outline rounded-lg"
+            className="btn btn-outline rounded-3xl"
             onClick={() => {
               selectCategory(c);
             }}

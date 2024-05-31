@@ -59,8 +59,8 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
         />
       </figure>
       <div className="flex w-full flex-col gap-2">
-        <span className="font-bold w-full overflow-x-hidden">
-          {p.name.substring(0, 20)}
+        <span className="font-bold min-h-6 w-full overflow-x-hidden">
+          {p.name}
         </span>
         <div className="card-actions justify-start">
           {pb.authStore.isValid ? (
@@ -83,7 +83,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
                 <button
                   disabled={addCartMutation.isLoading}
                   type={"submit"}
-                  className="btn btn-primary"
+                  className="btn rounded-3xl"
                   value="Add"
                 >
                   {addCartMutation.isLoading ? (

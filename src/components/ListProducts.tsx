@@ -15,12 +15,18 @@ const ListProducts = () => {
     });
   };
 
-  const { data, error } = useQuery(
+  const { data, error, isLoading } = useQuery(
     ["products", selectedcategory],
     fetchProductsOfCategory
   );
 
   if (error) return <h2>Choose a category</h2>;
+  if (isLoading)
+    return (
+      <div className="w-full h-full">
+        <div className="relative loading top-8 left-8 "></div>
+      </div>
+    );
 
   return (
     <div className="flex flex-col">

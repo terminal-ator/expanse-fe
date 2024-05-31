@@ -119,8 +119,8 @@ const Cart = () => {
   }
 
   return (
-    <div>
-      <h1>Cart</h1>
+    <div className="p-2">
+      <h1 className="text-3xl font-extrabold">Your Cart</h1>
 
       <div className="flex flex-row flex-wrap gap-2">
         {data?.map((ct) => (
@@ -136,39 +136,51 @@ const Cart = () => {
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-bold">Choose address</h2>
         <button
-          className="btn btn-secondary"
+          className="btn btn-primary sm:w-48"
           onClick={() => {
             setShowAddress(!showAddress);
           }}
         >
-          Add an address
+          {showAddress ? "Close" : "Add a new  Address"}
         </button>
         {showAddress ? (
           <div>
             <h4>New Address</h4>
             <form
-              style={{ display: "flex", flexDirection: "column" }}
+              className="flex flex-col w-full sm:w-1/2"
               onSubmit={handleSubmit(onSubmit)}
             >
               <input
                 placeholder="Name*"
+                className="input"
                 {...register("name", { required: true })}
               />
               <input
+                className="input"
                 placeholder="Address Line 1"
                 {...register("addr_1", { required: true })}
               />
-              <input placeholder="Address Line 2" {...register("addr_2")} />
               <input
+                className="input"
+                placeholder="Address Line 2"
+                {...register("addr_2")}
+              />
+              <input
+                className="input"
                 placeholder="Pincode*"
                 {...(register("pincode"), { required: true })}
               />
               <input
+                className="input"
                 placeholder="Mobile Number*"
                 {...register("mobile", { required: true })}
               />
-              <input placeholder="GSTIN" {...register("gstin")} />
-              <input type={"submit"} />
+              <input
+                className="input"
+                placeholder="GSTIN"
+                {...register("gstin")}
+              />
+              <input className="btn btn-primary" type={"submit"} />
             </form>
           </div>
         ) : null}
@@ -198,16 +210,18 @@ const Cart = () => {
         </form>
       </div>
 
-      <div className="flex flex-col w-full">
-        <h2>Payment</h2>
-        <p>We acccept only cash on delivery or upi on delivery right now</p>
-        <p>
-          When you place order, our team will contact you to confirm your order
+      <div className="flex flex-col w-full mt-2">
+        <h2 className="text-3xl font-extrabold">Payment</h2>
+        <p className="p-2">
+          We acccept only cash on delivery or upi on delivery right now. When
+          you place order, our team will contact you to confirm your order. View
+          our terms and conditions here. On placing order you confirm to our
+          terms and conditions.
         </p>
       </div>
       <button
         disabled={!addressID}
-        className="btn btn-accent w-full"
+        className="btn btn-primary w-full sm:w-1/3"
         onClick={placeOrder}
       >
         {addressID ? "Place order" : "Choose an address"}

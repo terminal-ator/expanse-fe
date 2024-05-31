@@ -48,9 +48,7 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove }) => {
         />
       </figure>
       <div className="flex w-full flex-col">
-        <h2 className="font-bold w-full overflow-x-hidden">
-          {p.name.substring(0, 20)}
-        </h2>
+        <h2 className="font-bold w-full overflow-x-hidden">{p.name}</h2>
         <div className="card-actions ">
           <p>Quantity: {quantity}</p>
         </div>
