@@ -24,7 +24,7 @@ function NavBar() {
         {user == "" ? (
           <Link href="/login"> Login </Link>
         ) : (
-          <Link href="/pofile">
+          <Link href="/profile">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
