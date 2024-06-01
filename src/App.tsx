@@ -7,14 +7,16 @@ import ProfilePage from "./Profile";
 
 function App() {
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <NavBar />
-      <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/cart" component={Cart} />
-        <Route path="/login" component={LoginPage} />
-        <Route path="/profile" component={ProfilePage} />
-      </Switch>
+      <div className="mt-20">
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/profile" component={ProfilePage} />
+        </Switch>
+      </div>
     </div>
   );
 }

@@ -35,7 +35,7 @@ function NavBar() {
   }, [cartData]);
 
   return (
-    <nav className="shadow-md p-2  flex justify-between items-center  w-full sm:m-auto navbar-start">
+    <nav className="shadow-md navbar z-40 bg-white fixed top-0 p-2  flex justify-between items-center  w-full sm:m-auto navbar-start">
       <Link className="text-4xl font-extrabold text-red-500" href="/">
         Good Deal
       </Link>

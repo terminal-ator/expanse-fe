@@ -22,7 +22,7 @@ function Home() {
   }, []);
 
   return (
-    <div className="p-2">
+    <div className="p-2 ">
       <h3 className="text-lg ">Buy products at wholesale price</h3>
 
       <ListCategories />
