@@ -3,9 +3,17 @@ import pb from "../pb";
 import { IOrder } from "../types";
 
 const ListOrders = () => {
-  const { data: orders } = useQuery("orders", () =>
+  const { data: orders, isLoading } = useQuery("orders", () =>
     pb.collection("orders").getFullList<IOrder>({ sort: "-id" })
   );
+
+  if (isLoading) {
+    return (
+      <div className="pt-2">
+        <div className="loading"></div>
+      </div>
+    );
+  }
   return (
     <div className="container">
       <h2 className="font-extrabold">Your Orders</h2>

@@ -112,6 +112,8 @@ const Cart = () => {
     // delete cart
   };
 
+  const placeOrderMutation = useMutation({ mutationFn: placeOrder });
+
   if (!pb.authStore.isValid) {
     return <div className="p-2">Please login to view your cart</div>;
   }
@@ -125,6 +127,10 @@ const Cart = () => {
         </Link>
       </div>
     );
+  }
+
+  if (placeOrderMutation.isSuccess) {
+    return <div>Your Order has been placed</div>;
   }
 
   return (
@@ -199,7 +205,7 @@ const Cart = () => {
             return (
               <div
                 key={ad.id}
-                className={`card hover:cursor-pointer ${
+                className={`card p-2 hover:cursor-pointer ${
                   ad.id == addressID ? "border-2" : ""
                 }`}
                 onClick={() => {
@@ -231,11 +237,18 @@ const Cart = () => {
         </p>
       </div>
       <button
-        disabled={!addressID}
+        disabled={!addressID || placeOrderMutation.isLoading}
         className="btn btn-primary w-full sm:w-1/3"
-        onClick={placeOrder}
+        onClick={() => {
+          placeOrderMutation.mutate();
+        }}
       >
-        {addressID ? "Place order" : "Choose an address"}
+        {placeOrderMutation.isLoading ? (
+          <div className="loading"></div>
+        ) : (
+          <div></div>
+        )}
+        {addressID ? "Place order" : "Choose an address to continue"}
       </button>
     </div>
   );
