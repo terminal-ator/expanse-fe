@@ -29,9 +29,9 @@ const ListProducts = () => {
     );
 
   return (
-    <div className="flex flex-col">
-      <h1 className=" font-extrabold">{selectedcategory?.name}</h1>
-      <div className="flex flex-row flex-1 justify-center sm:justify-start  flex-wrap gap-2 overflow-y-scroll">
+    <div className="flex flex-col p-2">
+      <h1 className=" font-bold text-2xl">{selectedcategory?.name}</h1>
+      <div className="flex flex-row flex-1  sm:justify-start  flex-wrap gap-2 overflow-y-scroll">
         {data
           ? data.map((p) => <ProductItem key={p.id} p={p} />)
           : "Choose a category"}

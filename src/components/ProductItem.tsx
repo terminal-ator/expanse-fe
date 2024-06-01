@@ -44,16 +44,16 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
   };
 
   const imageName = p.images[0];
-  const url = pb.files.getUrl(p, imageName, { thumb: "300x300" });
+  const url = pb.files.getUrl(p, imageName, { thumb: "100x100" });
 
   return (
     <div
       key={p.id}
-      className="card flex w-full  flex-col justify-center align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
+      className="card flex w-1/3  flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
     >
       <figure className="w-full m-auto rounded  mt-1">
         <img
-          className="h-200 rounded object-cover"
+          className="h-100 rounded object-cover"
           src={url}
           alt={"Image lost"}
         />

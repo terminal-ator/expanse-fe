@@ -21,11 +21,16 @@ function ProfilePage() {
     qc.removeQueries();
   };
   return (
-    <div className="container">
-      <h1>Profile</h1>
-      <button className="btn btn-error" onClick={onlogout}>
-        Logout
-      </button>
+    <div className="container p-2">
+      <div className="flex w-full sm:w-1/2 justify-between">
+        <h1>Hi, {pb.authStore?.model?.username}</h1>
+        <button
+          className="btn btn-error text-white rounded-3xl"
+          onClick={onlogout}
+        >
+          Logout
+        </button>
+      </div>
       <ListOrders />
     </div>
   );

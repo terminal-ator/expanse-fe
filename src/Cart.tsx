@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useQuery, useMutation } from "react-query";
+import { Link } from "wouter";
 import CartItem from "./components/CartItem";
 import pb from "./pb";
 import { useCartStore } from "./store";
@@ -104,6 +105,7 @@ const Cart = () => {
             .delete(d.id, { $autoCancel: false });
         });
         await Promise.all(cpromise);
+        changeStatus();
       }
     }
 
@@ -111,11 +113,18 @@ const Cart = () => {
   };
 
   if (!pb.authStore.isValid) {
-    return <div>Please login to view your cart</div>;
+    return <div className="p-2">Please login to view your cart</div>;
   }
 
   if (data && data.length < 1) {
-    return <div>Your cart is empty</div>;
+    return (
+      <div className="p-2">
+        Your cart is empty{" "}
+        <Link href="/" className="btn">
+          Add items
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -125,6 +134,7 @@ const Cart = () => {
       <div className="flex flex-row flex-wrap gap-2">
         {data?.map((ct) => (
           <CartItem
+            key={ct.id}
             p={ct.expand.of_product}
             quantity={ct.quantity}
             onRemove={() => {
@@ -136,7 +146,7 @@ const Cart = () => {
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-bold">Choose address</h2>
         <button
-          className="btn btn-primary sm:w-48"
+          className="btn sm:w-48"
           onClick={() => {
             setShowAddress(!showAddress);
           }}
@@ -188,6 +198,7 @@ const Cart = () => {
           {addressData?.map((ad) => {
             return (
               <div
+                key={ad.id}
                 className={`card hover:cursor-pointer ${
                   ad.id == addressID ? "border-2" : ""
                 }`}
