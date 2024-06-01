@@ -31,10 +31,12 @@ const ListProducts = () => {
   return (
     <div className="flex flex-col p-2">
       <h1 className=" font-bold text-2xl">{selectedcategory?.name}</h1>
-      <div className="flex flex-row flex-1  sm:justify-start  flex-wrap gap-2 overflow-y-scroll">
-        {data
-          ? data.map((p) => <ProductItem key={p.id} p={p} />)
-          : "Choose a category"}
+      <div className="flex flex-row  w-full flex-wrap gap-2 sm:overflow-hidden overflow-x-scroll">
+        {data ? (
+          data.map((p) => <ProductItem key={p.id} p={p} />)
+        ) : (
+          <div className="loading"></div>
+        )}
         {data && data?.length < 1 ? (
           <h2>Choose a category to get started</h2>
         ) : null}

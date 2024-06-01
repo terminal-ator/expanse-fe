@@ -44,22 +44,22 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
   };
 
   const imageName = p.images[0];
-  const url = pb.files.getUrl(p, imageName, { thumb: "100x100" });
+  const url = pb.files.getUrl(p, imageName, { thumb: "200x200" });
 
   return (
     <div
       key={p.id}
-      className="card flex w-1/2  flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
+      className="flex w-full sm:min-w-32  border-b-2 sm:border-none sm:min-h-52 sm:flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
     >
       <figure className="w-full m-auto rounded  mt-1">
         <img
-          className="h-100 rounded object-cover"
+          className="h-200 sm:h-100 rounded object-cover"
           src={url}
           alt={"Image lost"}
         />
       </figure>
       <div className="flex w-full flex-col gap-2">
-        <span className="font-bold min-h-6 w-full overflow-x-hidden">
+        <span className="font-bold min-h-11  w-full overflow-x-hidden">
           {p.name}
         </span>
         <div className="card-actions justify-start">
