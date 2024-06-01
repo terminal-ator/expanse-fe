@@ -7,7 +7,7 @@ import { CartItem } from "../types";
 
 function NavBar() {
   const [user, setUser] = useState("");
-  const { statusCode, changeStatus } = useCartStore();
+  const { statusCode } = useCartStore();
   const [count, setCount] = useState(0);
   const { data: cartData } = useQuery(["cart", statusCode], () => {
     return pb
@@ -35,7 +35,7 @@ function NavBar() {
   }, [cartData]);
 
   return (
-    <nav className="border-b-2 border-gray-200 p-2  flex justify-between items-center  w-full sm:m-auto navbar-start">
+    <nav className="shadow-md p-2  flex justify-between items-center  w-full sm:m-auto navbar-start">
       <Link className="text-4xl font-extrabold text-red-500" href="/">
         Good Deal
       </Link>
