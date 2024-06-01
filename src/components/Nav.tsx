@@ -35,17 +35,17 @@ function NavBar() {
   }, [cartData]);
 
   return (
-    <nav className="shadow-md navbar z-40 bg-white fixed top-0 p-2  flex justify-between items-center  w-full sm:m-auto navbar-start">
-      <Link className="text-4xl font-extrabold text-red-500" href="/">
-        Good Deal
+    <nav className="shadow-md p-2 z-40 bg-white fixed top-0   flex justify-between items-center  w-full sm:m-auto  ">
+      <Link className="text-2xl font-normal text-red-500" href="/">
+        Good<span className="font-bold">Deal.</span>
       </Link>
       <div className="flex flex-row gap-4 justify-center h-full ">
         {user == "" ? (
-          <Link className="btn rounded-3xl" href="/login">
+          <Link className="btn btn-sm rounded-3xl" href="/login">
             Login
           </Link>
         ) : (
-          <Link className="btn rounded-3xl" href="/profile">
+          <Link className="btn btn-sm rounded-3xl" href="/profile">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -63,7 +63,7 @@ function NavBar() {
           </Link>
         )}
         <Link
-          className="btn flex flex-row  bg-red-600 text-white rounded-3xl justify-between"
+          className="btn btn-sm flex flex-row  bg-red-600 text-white rounded-3xl justify-between"
           href="/cart"
         >
           <svg

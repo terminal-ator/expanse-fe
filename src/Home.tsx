@@ -21,9 +21,26 @@ function Home() {
     }
   }, []);
 
+  const share = () => {
+    navigator.share({
+      url: "https://jpgn.in",
+      text: "Buy every product at wholesale prices.",
+    });
+  };
+
   return (
     <div className="p-2 ">
-      <h3 className="text-lg ">Buy products at wholesale price</h3>
+      <h3 className="text-lg ">
+        Every Product at wholesale price. Next day delivery*
+        <button
+          className="btn"
+          onClick={() => {
+            share();
+          }}
+        >
+          share with friends
+        </button>
+      </h3>
 
       <ListCategories />
       <ListProducts />

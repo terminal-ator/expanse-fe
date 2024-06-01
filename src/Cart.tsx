@@ -12,7 +12,7 @@ const Cart = () => {
   const [showAddress, setShowAddress] = useState(false);
   const { register, handleSubmit, reset } = useForm<IAddress>();
 
-  const { data } = useQuery(["cart", statusCode], () => {
+  const { data, refetch } = useQuery(["cart", statusCode], () => {
     return pb
       .collection("cart_items")
       .getFullList<ICartItem>({ expand: "of_product" });
@@ -58,7 +58,7 @@ const Cart = () => {
   const mutateDelete = useMutation({
     mutationFn: deleteFromCart,
     onSuccess: () => {
-      changeStatus();
+      refetch();
     },
   });
 
