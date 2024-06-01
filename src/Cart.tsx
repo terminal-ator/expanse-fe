@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useQuery, useMutation } from "react-query";
 import { Link } from "wouter";
@@ -10,6 +10,7 @@ import { IAddress, CartItem as ICartItem } from "./types";
 const Cart = () => {
   const { statusCode, changeStatus } = useCartStore();
   const [showAddress, setShowAddress] = useState(false);
+  const [total, setTotal] = useState(0);
   const { register, handleSubmit, reset } = useForm<IAddress>();
 
   const { data, refetch } = useQuery(["cart", statusCode], () => {
@@ -17,6 +18,15 @@ const Cart = () => {
       .collection("cart_items")
       .getFullList<ICartItem>({ expand: "of_product" });
   });
+
+  useEffect(() => {
+    if (data) {
+      const t = data.reduce((sum, t) => {
+        return sum + t.quantity * t.expand.of_product.amount_2;
+      }, 0);
+      setTotal(t);
+    }
+  }, [data]);
 
   const { data: addressData, refetch: addressRefetch } = useQuery(
     ["address"],
@@ -26,24 +36,6 @@ const Cart = () => {
   );
 
   const [addressID, setAddressID] = useState<string>();
-
-  // todo
-  // const updateQuantity = ({
-  //   id,
-  //   quantity,
-  // }: {
-  //   id: string;
-  //   quantity: number;
-  // }) => {
-  //   return pb.collection("cart_items").update(id, { quantity });
-  // };
-
-  // const mutateQuantity = useMutation({
-  //   mutationFn: updateQuantity,
-  //   onSuccess: () => {
-  //     changeStatus();
-  //   },
-  // });
 
   const addAddress = (add: IAddress) => {
     const id = pb.authStore?.model?.id;
@@ -148,6 +140,9 @@ const Cart = () => {
             }}
           />
         ))}
+      </div>
+      <div className="w-full flex justify-between font-extrabold text-lg">
+        Total: <span>₹ {total}</span>
       </div>
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-bold">Choose address</h2>

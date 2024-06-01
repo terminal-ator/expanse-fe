@@ -33,24 +33,28 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove }) => {
   //   };
 
   const imageName = p.images[0];
-  const url = pb.files.getUrl(p, imageName, { thumb: "300x300" });
+  const url = pb.files.getUrl(p, imageName, { thumb: "100x100" });
 
   return (
     <div
       key={p.id}
-      className="card flex  flex-col justify-center align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 w-48 overflow-x-hidden"
+      className=" w-full sm:w-1/2 flex flex-row  p-2 pt-0 pb-2 mt-4 bg-base-100 border-b-2 "
     >
-      <figure className="w-full m-auto rounded  mt-1">
-        <img
-          className="h-200 rounded object-cover"
-          src={url}
-          alt={"Image lost"}
-        />
-      </figure>
+      <div className="flex flex-col">
+        <figure className="w-full m-auto rounded  mt-1">
+          <img
+            className="h-100 rounded object-cover"
+            src={url}
+            alt={"Image lost"}
+          />
+        </figure>
+        <div className="font-bold">{quantity}x</div>
+      </div>
       <div className="flex w-full flex-col">
         <h2 className="font-bold w-full overflow-x-hidden">{p.name}</h2>
         <div className="card-actions ">
-          <p>Quantity: {quantity}</p>
+          <p>Price / item : ₹ {p.amount_2}</p>
+          <p>Total: ₹ {p.amount_2 * quantity}</p>
         </div>
         <div>
           <button onClick={onRemove} className="btn btn-error btn-sm">

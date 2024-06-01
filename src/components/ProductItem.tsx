@@ -62,15 +62,17 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
         <span className="font-bold min-h-11  w-full overflow-x-hidden">
           {p.name}
         </span>
-        <div className="card-actions justify-start">
+        <div className=" mt-2 justify-start">
           {pb.authStore.isValid ? (
             <div>
               <div className="">Mrp: ₹ {p.amount_1}</div>
               <div className="">Price: ₹ {p.amount_2}</div>
-              <form className="flex flex-col gap-2" onSubmit={handleSave}>
+
+              <form className="flex w-full   gap-4" onSubmit={handleSave}>
                 <input
-                  className="input  input-bordered w-full max-w-xs"
+                  className="input input-sm  input-bordered w-1/2"
                   value={quant}
+                  disabled={addCartMutation.isLoading}
                   onChange={(e) => {
                     setQuant(parseInt(e.target.value));
                   }}
@@ -83,7 +85,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
                 <button
                   disabled={addCartMutation.isLoading}
                   type={"submit"}
-                  className="btn rounded-3xl"
+                  className="btn btn-sm rounded-3xl"
                   value="Add"
                 >
                   {addCartMutation.isLoading ? (
