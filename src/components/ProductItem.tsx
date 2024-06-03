@@ -10,39 +10,47 @@ interface IProductItem {
 }
 const ProductItem: FC<IProductItem> = ({ p }) => {
   const [quant, setQuant] = useState(1); // get state from store;
-  const { changeStatus } = useCartStore();
+  const [added, setAdded] = useState(false);
+  // const { changeStatus } = useCartStore();
   const addItem = useCartStore((s) => s.addItem);
+  const cart = useCartStore((s) => s.cart);
 
   const addToCart = async () => {
-    const user_id: string = pb.authStore.model?.id;
+    // const user_id: string = pb.authStore.model?.id;
     const item: CartItem = {
+      id: crypto.randomUUID().toString(),
       quantity: quant,
       expand: {
         of_product: p,
       },
     };
     addItem(p.id, item);
-    try {
-      const data = await pb
-        .collection("cart_items")
-        .create({ of_user: user_id, of_product: p.id, quantity: quant });
-      console.log({ data });
-    } catch (e) {
-      const record = await pb
-        .collection("cart_items")
-        .getFirstListItem(`of_user.id="${user_id}" && of_product.id="${p.id}"`);
-      const data = await pb.collection("cart_items").update(record.id, {
-        of_user: user_id,
-        of_product: p.id,
-        quantity: quant,
-      });
-      console.log({ data });
+    setAdded(true);
+    setTimeout(() => {
+      setAdded(false);
+    }, 1000);
 
-      // console.log( { e });
-      // console.log("error")
-    } finally {
-      changeStatus();
-    }
+    // try {
+    //   const data = await pb
+    //     .collection("cart_items")
+    //     .create({ of_user: user_id, of_product: p.id, quantity: quant });
+    //   console.log({ data });
+    // } catch (e) {
+    //   const record = await pb
+    //     .collection("cart_items")
+    //     .getFirstListItem(`of_user.id="${user_id}" && of_product.id="${p.id}"`);
+    //   const data = await pb.collection("cart_items").update(record.id, {
+    //     of_user: user_id,
+    //     of_product: p.id,
+    //     quantity: quant,
+    //   });
+    //   console.log({ data });
+
+    //   // console.log( { e });
+    //   // console.log("error")
+    // } finally {
+    //   changeStatus();
+    // }
   };
 
   const addCartMutation = useMutation({ mutationFn: addToCart });
@@ -95,7 +103,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
                   disabled={addCartMutation.isLoading}
                   type={"submit"}
                   className="btn btn-sm rounded-3xl"
-                  value="Add"
+                  value={"add"}
                 >
                   {addCartMutation.isLoading ? (
                     <span className="loading loading-spinner"></span>
@@ -112,6 +120,16 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
                 login
               </Link>
             </div>
+          )}
+        </div>
+        <div>
+          {cart[p.id] ? (
+            <div className="badge badge-primary p-2">
+              {" "}
+              {`${cart[p.id].quantity} in cart`}{" "}
+            </div>
+          ) : (
+            ""
           )}
         </div>
       </div>

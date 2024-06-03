@@ -35,10 +35,10 @@ const LoginPage = () => {
   return (
     <div className="container">
       <div className="flex sm:w-96 sm:m-auto flex-col gap-2">
-        <button className="btn btn-success" onClick={authenticateWithGoogle}>
+        <button className="btn rounded-3xl" onClick={authenticateWithGoogle}>
           Continue with google
         </button>
-        <button className="btn btn-success" onClick={authenticateWithGithub}>
+        <button className="btn rounded-3xl" onClick={authenticateWithGithub}>
           Continue with github
         </button>
       </div>

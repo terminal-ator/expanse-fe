@@ -7,7 +7,7 @@ import { CartItem } from "../types";
 
 function NavBar() {
   const [user, setUser] = useState("");
-  const { statusCode } = useCartStore();
+  const { statusCode, cart } = useCartStore();
   const [count, setCount] = useState(0);
   const { data: cartData } = useQuery(["cart", statusCode], () => {
     return pb
@@ -28,11 +28,11 @@ function NavBar() {
   }, []);
 
   useEffect(() => {
-    if (cartData) {
-      let c = cartData.length;
+    if (cart) {
+      let c = Object.entries(cart).length;
       setCount(c);
     }
-  }, [cartData]);
+  }, [cart]);
 
   return (
     <nav className="shadow-md p-2 z-40 bg-white fixed top-0   flex justify-between items-center  w-full sm:m-auto  ">

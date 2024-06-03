@@ -8,25 +8,19 @@ import { useCartStore } from "./store";
 import { IAddress, CartItem as ICartItem } from "./types";
 
 const Cart = () => {
-  const { statusCode, changeStatus } = useCartStore();
+  const { statusCode, cart, deleteItem, clearCart } = useCartStore();
   const [showAddress, setShowAddress] = useState(false);
   const [total, setTotal] = useState(0);
   const { register, handleSubmit, reset } = useForm<IAddress>();
 
-  const { data, refetch } = useQuery(["cart", statusCode], () => {
-    return pb
-      .collection("cart_items")
-      .getFullList<ICartItem>({ expand: "of_product" });
-  });
-
   useEffect(() => {
-    if (data) {
-      const t = data.reduce((sum, t) => {
+    if (cart) {
+      const t = Object.entries(cart).reduce((sum, [_, t]) => {
         return sum + t.quantity * t.expand.of_product.amount_2;
       }, 0);
-      setTotal(t);
+      setTotal(Math.round(t));
     }
-  }, [data]);
+  }, [cart]);
 
   const { data: addressData, refetch: addressRefetch } = useQuery(
     ["address"],
@@ -41,18 +35,6 @@ const Cart = () => {
     const id = pb.authStore?.model?.id;
     return pb.collection("addresses").create({ ...add, of_user: id });
   };
-
-  // remove from cart
-  const deleteFromCart = ({ id }: { id: string }) => {
-    return pb.collection("cart_items").delete(id);
-  };
-
-  const mutateDelete = useMutation({
-    mutationFn: deleteFromCart,
-    onSuccess: () => {
-      refetch();
-    },
-  });
 
   const mutateNewAddress = useMutation({
     mutationFn: addAddress,
@@ -80,25 +62,17 @@ const Cart = () => {
     // add cart to order lines
     const orderRecord = await pb.collection("orders").create(orderData);
 
-    const order_lines = data?.map((d) => ({
+    const order_lines = Object.entries(cart).map(([_, d]) => ({
       of_order: orderRecord.id,
       of_product: d.expand.of_product.id,
       quantity: d.quantity,
     }));
     if (order_lines) {
       const zpromise = order_lines.map((o) => {
-        return pb.collection("order_lines").create(o, { $autoCancel: false });
+        return pb.collection("orderlines").create(o, { $autoCancel: false });
       });
       await Promise.all(zpromise);
-      if (data) {
-        const cpromise = data.map((d) => {
-          return pb
-            .collection("cart_items")
-            .delete(d.id, { $autoCancel: false });
-        });
-        await Promise.all(cpromise);
-        changeStatus();
-      }
+      clearCart();
     }
 
     // delete cart
@@ -110,7 +84,7 @@ const Cart = () => {
     return <div className="p-2">Please login to view your cart</div>;
   }
 
-  if (data && data.length < 1) {
+  if (cart && Object.entries(cart).length < 1) {
     return (
       <div className="p-2">
         Your cart is empty{" "}
@@ -130,13 +104,13 @@ const Cart = () => {
       <h1 className="text-3xl font-extrabold">Your Cart</h1>
 
       <div className="flex flex-row flex-wrap gap-2">
-        {data?.map((ct) => (
+        {Object.entries(cart).map(([idx, ct]) => (
           <CartItem
             key={ct.id}
             p={ct.expand.of_product}
             quantity={ct.quantity}
             onRemove={() => {
-              mutateDelete.mutate({ id: ct.id });
+              deleteItem(idx);
             }}
           />
         ))}

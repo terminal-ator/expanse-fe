@@ -1,6 +1,7 @@
 import { FC } from "react";
 import pb from "../pb";
 import { Product } from "../types";
+import { useCartStore } from "../store";
 
 interface ICartItem {
   p: Product;
@@ -31,7 +32,7 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove }) => {
   //       changeStatus();
   //     }
   //   };
-
+  const { addItem } = useCartStore();
   const imageName = p.images[0];
   const url = pb.files.getUrl(p, imageName, { thumb: "100x100" });
 
@@ -48,7 +49,22 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove }) => {
             alt={"Image lost"}
           />
         </figure>
-        <div className="font-bold">{quantity}x</div>
+        <div className="font-bold">
+          <input
+            type="number"
+            className="input input-xs w-1/2 input-bordered"
+            onChange={(e) => {
+              const num = parseInt(e.target.value) ?? 0;
+              addItem(p.id, {
+                quantity: num,
+                expand: {
+                  of_product: p,
+                },
+              });
+            }}
+            value={quantity}
+          />
+        </div>
       </div>
       <div className="flex w-full flex-col">
         <h2 className="font-bold w-full overflow-x-hidden">{p.name}</h2>
@@ -57,7 +73,10 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove }) => {
           <p>Total: ₹ {p.amount_2 * quantity}</p>
         </div>
         <div>
-          <button onClick={onRemove} className="btn btn-error btn-sm">
+          <button
+            onClick={onRemove}
+            className="btn btn-circle btn-error btn-sm "
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

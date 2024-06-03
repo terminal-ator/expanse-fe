@@ -4,8 +4,13 @@ import { IOrder } from "../types";
 
 const ListOrders = () => {
   const { data: orders, isLoading } = useQuery("orders", () =>
-    pb.collection("orders").getFullList<IOrder>({ sort: "-id" })
+    pb.collection("orders").getFullList<IOrder>({
+      sort: "-created",
+      expand: "at_address, of_user, orderlines_via_of_order",
+    })
   );
+
+  // console.log({ orders });
 
   if (isLoading) {
     return (
@@ -19,11 +24,11 @@ const ListOrders = () => {
       <h2 className="font-extrabold">Your Orders</h2>
       {orders
         ? orders.map((o) => (
-            <div className="card ">
+            <div className="card my-2 rounded-xl bordered p-2">
               <div>
-                <p>Order ID: {o.id}</p>
-                <p>Status: {o.order_status}</p>
-                <p>Ordered: {o.created_at}</p>
+                <p className="badge badge-primary">{o.id}</p>
+                <p className="badge ">{o.order_status}</p>
+                <p>Ordered: {o.created}</p>
               </div>
             </div>
           ))
