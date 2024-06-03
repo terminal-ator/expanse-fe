@@ -13,7 +13,7 @@ export interface Category {
   }
   
  export interface CartItem {
-    id: string;
+    id?: string;
     quantity: number;
     expand: {
       of_product: Product;

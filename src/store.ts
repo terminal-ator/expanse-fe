@@ -1,20 +1,21 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { Product } from './types';
+import { CartItem } from './types';
+import { immer } from 'zustand/middleware/immer';
 
 
 interface CartStore {
-    cart: {};
+    cart:Map<string, CartItem>;
     statusCode: string;
-    addItem: (product: Product, quantity: number) => void;
+    addItem: (id: string, cartItem: CartItem) => void;
     deleteItem: (id: string) => void;
     changeStatus: ()=>void
   }
   
-  export const useCartStore = create<CartStore>()(
-    persist(
+  export const useCartStore = create<CartStore>()(persist(
+    immer(
       (set, get) => ({
-        cart: {},
+        cart: new Map(),
         changeStatus: ()=>{
           const stat = crypto.randomUUID().toString()
           set({
@@ -22,21 +23,25 @@ interface CartStore {
           })
         },
         statusCode:"",
-
-        addItem: (product: Product, quantity: number) => {
-          let cart = get().cart;
-          let c = { ...cart, [product.id]: { product, quantity} };
-          set({ cart: c });
+        addItem: (id: string, cartItem: CartItem) => {
+          set((state)=>{
+            console.log(state);
+            console.log( id, cartItem)
+            return state.cart.set(id, cartItem);
+          })
+          console.log("updating cart")
+          console.log(get().cart);
         },
         deleteItem: (id: string) => {
-          let cart = get().cart;
-          let c = { ...cart, [id]: {quantity:0} };
-          set({ cart: c });
+          set((state)=>(
+            state.cart.delete(id)
+          ))
         },
       }),
-      {
-        name: 'cart-store',
-        storage: createJSONStorage(() => localStorage),
-      }
-    )
-  );
+     
+    ),
+    {
+      name: 'cart-store',
+      storage: createJSONStorage(() => localStorage),
+    }
+  ));

@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { Link } from "wouter";
 import pb from "../pb";
 import { useCartStore } from "../store";
-import { Product } from "../types";
+import { CartItem, Product } from "../types";
 
 interface IProductItem {
   p: Product;
@@ -11,9 +11,17 @@ interface IProductItem {
 const ProductItem: FC<IProductItem> = ({ p }) => {
   const [quant, setQuant] = useState(1); // get state from store;
   const { changeStatus } = useCartStore();
+  const addItem = useCartStore((s) => s.addItem);
 
   const addToCart = async () => {
     const user_id: string = pb.authStore.model?.id;
+    const item: CartItem = {
+      quantity: quant,
+      expand: {
+        of_product: p,
+      },
+    };
+    addItem(p.id, item);
     try {
       const data = await pb
         .collection("cart_items")
@@ -29,6 +37,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
         quantity: quant,
       });
       console.log({ data });
+
       // console.log( { e });
       // console.log("error")
     } finally {
