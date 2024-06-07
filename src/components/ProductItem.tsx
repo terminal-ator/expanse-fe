@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import pb from "../pb";
 import { useCartStore } from "../store";
 import { CartItem, Product } from "../types";
+import posthog from "posthog-js";
 
 interface IProductItem {
   p: Product;
@@ -25,6 +26,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
       },
     };
     addItem(p.id, item);
+    posthog.capture("product added", { p, quant });
     setAdded(true);
     setTimeout(() => {
       setAdded(false);
@@ -57,6 +59,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
 
   const handleSave = async (e: FormEvent) => {
     e.preventDefault();
+    if (quant < 1) return;
     addCartMutation.mutate();
   };
 
@@ -87,10 +90,16 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
 
               <form className="flex w-full   gap-4" onSubmit={handleSave}>
                 <input
+                  required
                   className="input input-sm  input-bordered w-1/2"
                   value={quant}
                   disabled={addCartMutation.isLoading}
                   onChange={(e) => {
+                    // if(e.target.value == "") return;
+                    // if (e.target.value == "") {
+                    //   setQuant(0);
+                    //   return;
+                    // }
                     setQuant(parseInt(e.target.value));
                   }}
                   onFocus={(e) => {
@@ -129,7 +138,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
               {`${cart[p.id].quantity} in cart`}{" "}
             </div>
           ) : (
-            ""
+            <div className="badge p-2 invisible"></div>
           )}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useQuery, useMutation } from "react-query";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import CartItem from "./components/CartItem";
 import pb from "./pb";
 import { useCartStore } from "./store";
@@ -12,10 +12,14 @@ const Cart = () => {
   const [showAddress, setShowAddress] = useState(false);
   const [total, setTotal] = useState(0);
   const { register, handleSubmit, reset } = useForm<IAddress>();
+  const [location, setLocation] = useLocation();
 
   useEffect(() => {
     if (cart) {
       const t = Object.entries(cart).reduce((sum, [_, t]) => {
+        if (isNaN(t.quantity)) {
+          return sum + 0;
+        }
         return sum + t.quantity * t.expand.of_product.amount_2;
       }, 0);
       setTotal(Math.round(t));
@@ -73,6 +77,7 @@ const Cart = () => {
       });
       await Promise.all(zpromise);
       clearCart();
+      setLocation("/confirmation");
     }
 
     // delete cart
@@ -115,7 +120,7 @@ const Cart = () => {
           />
         ))}
       </div>
-      <div className="w-full flex justify-between font-extrabold text-lg">
+      <div className="w-full flex justify-between font-extrabold text-lg sm:w-1/2">
         Total: <span>₹ {total}</span>
       </div>
       <div className="flex flex-col gap-2">
@@ -137,11 +142,11 @@ const Cart = () => {
             >
               <input
                 placeholder="Name*"
-                className="input"
+                className="input input-bordered"
                 {...register("name", { required: true })}
               />
               <input
-                className="input"
+                className="input input-bordered"
                 placeholder="Address Line 1"
                 {...register("addr_1", { required: true })}
               />
@@ -206,7 +211,7 @@ const Cart = () => {
         </p>
       </div>
       <button
-        disabled={!addressID || placeOrderMutation.isLoading}
+        disabled={!addressID || total <= 0 || placeOrderMutation.isLoading}
         className="btn btn-primary w-full sm:w-1/3"
         onClick={() => {
           placeOrderMutation.mutate();
@@ -217,7 +222,9 @@ const Cart = () => {
         ) : (
           <div></div>
         )}
-        {addressID ? "Place order" : "Choose an address to continue"}
+        {addressID && total > 0
+          ? `Place order: ₹${total}`
+          : "Complete steps above"}
       </button>
     </div>
   );
