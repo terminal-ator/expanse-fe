@@ -46,3 +46,27 @@ export const useCartStore = create<CartStore>()(
     }
   )
 );
+
+interface PinStore {
+  pincode: string;
+  setPincode: (pin: string) => void;
+  clearPincode: () => void;
+}
+
+export const usePincodeStore = create<PinStore>()(
+  persist(
+    (set, get) => ({
+      pincode: "",
+      setPincode: (pin: string) => {
+        set({ pincode: pin });
+      },
+      clearPincode: () => {
+        set({ pincode: "" });
+      },
+    }),
+    {
+      name: "pincode",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);

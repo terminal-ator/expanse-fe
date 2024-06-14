@@ -31,6 +31,7 @@ const ListOrders = () => {
                   <p className="badge badge-primary">{o.id}</p>
                   <p className="badge ">{o.order_status}</p>
                   <p>Ordered: {o.created}</p>
+                  <p>Amount:₹ {o.order_amount}</p>
                 </div>
               </div>
             </Link>

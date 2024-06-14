@@ -1,11 +1,12 @@
 import React from "react";
-import { useQueries, useQuery } from "react-query";
-import { useParams } from "wouter";
+import { useMutation, useQueries, useQuery } from "react-query";
+import { useLocation, useParams } from "wouter";
 import pb from "./pb";
 import { CartItem as ICartItem } from "./types";
 import CartItem from "./components/CartItem";
 
 const OrderDetail = () => {
+  const [_, setLocation] = useLocation();
   const params = useParams();
 
   const results = useQueries([
@@ -23,6 +24,17 @@ const OrderDetail = () => {
     },
   ]);
 
+  const cancelOrderMutation = useMutation({
+    mutationFn: () => {
+      return pb
+        .collection("orders")
+        .update(params.id!, { order_status: "cancelled" });
+    },
+    onSuccess: () => {
+      setLocation("/profile");
+    },
+  });
+
   if (results[0].isLoading || results[1].isLoading) {
     return (
       <div className="p-2">
@@ -38,12 +50,19 @@ const OrderDetail = () => {
         <div className="badge badge-primary">
           {results[0]?.data?.order_status}
         </div>
+        <div>Order Amount: ₹ {results[0]?.data?.order_amount}</div>
         <div>
           {results[0]?.data?.order_status === "pending" ? (
             <div>
               <button
+                disabled={cancelOrderMutation.isLoading}
                 onClick={() => {
-                  confirm("Do you really want to cancel this order?");
+                  const res = confirm(
+                    "Do you really want to cancel this order?"
+                  );
+                  if (res) {
+                    cancelOrderMutation.mutate();
+                  }
                 }}
                 className="btn btn-error text-white"
               >
@@ -52,7 +71,9 @@ const OrderDetail = () => {
             </div>
           ) : (
             <div>
-              Order has been fulfilled, call <a>7982255302</a> for queries
+              <a className="link" href="mailto:itushargarg@gmail.com">
+                Contact us
+              </a>
             </div>
           )}
         </div>

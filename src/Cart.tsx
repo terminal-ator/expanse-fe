@@ -59,6 +59,7 @@ const Cart = () => {
     const id = pb.authStore?.model?.id;
     const orderData = {
       order_status: "pending",
+      order_amount: total,
       is_complete: false,
       of_user: id,
       at_address: addressID,

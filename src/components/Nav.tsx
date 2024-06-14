@@ -2,18 +2,14 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "wouter";
 import pb from "../pb";
-import { useCartStore } from "../store";
+import { useCartStore, usePincodeStore } from "../store";
 import { CartItem } from "../types";
 
 function NavBar() {
   const [user, setUser] = useState("");
-  const { statusCode, cart } = useCartStore();
+  const { cart } = useCartStore();
   const [count, setCount] = useState(0);
-  const { data: cartData } = useQuery(["cart", statusCode], () => {
-    return pb
-      .collection("cart_items")
-      .getFullList<CartItem>({ expand: "of_product" });
-  });
+  const { pincode, clearPincode } = usePincodeStore();
 
   useEffect(() => {
     pb.authStore.onChange((us) => {
@@ -36,9 +32,22 @@ function NavBar() {
 
   return (
     <nav className="shadow-md p-2 z-40 bg-white fixed top-0   flex justify-between items-center  w-full sm:m-auto  ">
-      <Link className="text-2xl font-normal text-red-500" href="/">
-        Good<span className="font-bold">Deal.</span>
-      </Link>
+      <div className="flex items-center gap-4">
+        <Link className="text-2xl font-normal text-red-500" href="/">
+          Good<span className="font-bold">Deal.</span>
+        </Link>
+        <div>
+          Delivery to:{" "}
+          <button
+            className="link"
+            onClick={() => {
+              clearPincode();
+            }}
+          >
+            {pincode}
+          </button>
+        </div>
+      </div>
       <div className="flex flex-row gap-4 justify-center h-full ">
         {user == "" ? (
           <Link className="btn btn-sm rounded-3xl" href="/login">
