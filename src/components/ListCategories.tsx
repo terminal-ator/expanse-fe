@@ -7,7 +7,7 @@ import { Category } from "../types";
 
 const ListCategories = () => {
   const setCategory = useSetAtom(categoryAtom);
-  const { data } = useQuery("categories", () =>
+  const { data, isLoading } = useQuery("categories", () =>
     pb.collection("categories").getFullList<Category>({ sort: "name" })
   );
   const selectCategory = (c: Category) => {
@@ -16,10 +16,14 @@ const ListCategories = () => {
 
   useEffect(() => {
     if (data) setCategory(data[0]);
-  }, []);
+  }, [data]);
+
+  if (isLoading) {
+    return <div className="loading"></div>;
+  }
 
   return (
-    <div className="sticky top-11 left-0 z-20 glass">
+    <div className="sticky top-16 left-0 z-20 glass">
       <div className=" mt-2 flex flex-row gap-2 w-full overflow-x-scroll p-2 ">
         {data?.map((c) => (
           <button

@@ -6,11 +6,13 @@ import pb from "./pb";
 const StartPage = () => {
   const [pincode, setTempPincode] = useState("");
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
   const { setPincode } = usePincodeStore();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErr("");
+    setLoading(true);
     if (pincode) {
       const validPincode = z
         .string()
@@ -24,6 +26,7 @@ const StartPage = () => {
           .getFullList({ filter: `pincode = '${pincode}'` });
         if (data.length < 1) {
           alert("We dont service your area");
+          setLoading(false);
           return;
         }
         setPincode(pincode);
@@ -31,6 +34,7 @@ const StartPage = () => {
         alert("Enter correct pincode");
       }
     }
+    setLoading(false);
   };
 
   return (
@@ -54,7 +58,8 @@ const StartPage = () => {
               className="input input-bordered w-full max-w-xs"
               placeholder="Enter 6 digit pincode"
             />
-            <button type="submit" className="btn">
+            <button disabled={loading} type="submit" className="btn">
+              {loading ? <div className="loading" /> : null}
               Continue
             </button>
           </form>

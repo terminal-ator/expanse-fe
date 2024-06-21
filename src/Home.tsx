@@ -31,7 +31,7 @@ function Home() {
   return (
     <div className="p-2 ">
       <h3 className="text-lg ">
-        Why pay more? Buy products at wholesale prices.
+        Best place to find everyday products at discount (wholesale prices)
         <button
           className="link ml-2"
           onClick={() => {

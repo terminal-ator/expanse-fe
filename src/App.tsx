@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="w-full relative">
       <NavBar />
-      <div className="mt-12">
+      <div className="mt-16">
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/cart" component={Cart} />
