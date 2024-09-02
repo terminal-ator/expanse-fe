@@ -3,10 +3,13 @@ import { Link } from "wouter";
 
 const OrderStatusPage = () => {
   return (
-    <div className="container p-2">
-      <h1>Your Order is placed</h1>
+    <div className="container p-4">
+      <h1>
+        Congrats, we have received your order. View your profile to see updates.
+        Our team might contact you for further details
+      </h1>
       <Link href="/" className="btn ">
-        New Order
+        Need more product? Create another order!
       </Link>
     </div>
   );

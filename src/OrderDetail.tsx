@@ -43,6 +43,8 @@ const OrderDetail = () => {
     );
   }
 
+  console.log(results);
+
   return (
     <div className="p-2">
       <h1>Viewing order: {params.id}</h1>
@@ -79,15 +81,20 @@ const OrderDetail = () => {
         </div>
       </div>
       <div className="font-bold">Items</div>
-      {results[1].data?.map((x) => (
-        <CartItem
-          onRemove={() => {}}
-          immutableMode={true}
-          key={x.id}
-          p={x.expand.of_product}
-          quantity={x.quantity}
-        />
-      ))}
+      {results[1]?.data?.map((x) => {
+        if (!x) return null;
+        console.log({ x });
+        if (!x?.expand?.of_product) return null;
+        return (
+          <CartItem
+            onRemove={() => {}}
+            immutableMode={true}
+            key={x.id}
+            p={x?.expand?.of_product}
+            quantity={x.quantity}
+          />
+        );
+      })}
     </div>
   );
 };

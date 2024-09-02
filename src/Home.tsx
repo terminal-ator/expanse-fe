@@ -31,14 +31,14 @@ function Home() {
   return (
     <div className="p-2 ">
       <h3 className="text-lg ">
-        Best place to find everyday products at discount (wholesale prices)
+        Buy products at wholesale rate.
         <button
           className="link ml-2"
           onClick={() => {
             share();
           }}
         >
-          share with friends
+          Share with friends
         </button>
       </h3>
 

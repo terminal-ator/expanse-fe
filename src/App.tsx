@@ -1,5 +1,5 @@
 import Home from "./Home";
-import { Switch, Route } from "wouter";
+import { Switch, Route, Router } from "wouter";
 import Cart from "./Cart";
 import NavBar from "./components/Nav";
 import LoginPage from "./Login";

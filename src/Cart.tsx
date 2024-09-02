@@ -152,22 +152,22 @@ const Cart = () => {
                 {...register("addr_1", { required: true })}
               />
               <input
-                className="input"
+                className="input input-bordered"
                 placeholder="Address Line 2"
                 {...register("addr_2")}
               />
               <input
-                className="input"
+                className="input input-bordered"
                 placeholder="Pincode*"
                 {...(register("pincode"), { required: true })}
               />
               <input
-                className="input"
+                className="input input-bordered"
                 placeholder="Mobile Number*"
                 {...register("mobile", { required: true })}
               />
               <input
-                className="input"
+                className="input input-bordered"
                 placeholder="GSTIN"
                 {...register("gstin")}
               />

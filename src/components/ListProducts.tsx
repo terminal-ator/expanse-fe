@@ -9,10 +9,17 @@ import ProductItem from "./ProductItem";
 const ListProducts = () => {
   const selectedcategory = useAtomValue(categoryAtom);
 
-  const fetchProductsOfCategory = () => {
-    return pb.collection("products").getFullList<Product>({
-      filter: `category.id?="${selectedcategory?.id}"`,
-    });
+  const fetchProductsOfCategory = async () => {
+    if (selectedcategory) {
+      return await pb.collection("products").getFullList<Product>({
+        filter: `category.id?="${selectedcategory?.id}"`,
+      });
+    } else {
+      const prods = await pb.collection("products").getList<Product>(1, 30, {
+        filter: "featured = true",
+      });
+      return prods.items;
+    }
   };
 
   const { data, error, isLoading } = useQuery(
@@ -30,7 +37,9 @@ const ListProducts = () => {
 
   return (
     <div className="flex flex-col p-2">
-      <h1 className=" font-bold text-2xl">{selectedcategory?.name}</h1>
+      <h1 className=" font-bold text-2xl">
+        {selectedcategory ? selectedcategory.name : "Featured"}
+      </h1>
       <div className="flex flex-row  w-full flex-wrap gap-2  overflow-x-scroll sm:overflow-x-hidden">
         {data ? (
           data.map((p) => <ProductItem key={p.id} p={p} />)
