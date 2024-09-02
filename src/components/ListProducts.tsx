@@ -13,10 +13,12 @@ const ListProducts = () => {
     if (selectedcategory) {
       return await pb.collection("products").getFullList<Product>({
         filter: `category.id?="${selectedcategory?.id}"`,
+        sort: "name",
       });
     } else {
       const prods = await pb.collection("products").getList<Product>(1, 30, {
         filter: "featured = true",
+        sort: "name",
       });
       return prods.items;
     }

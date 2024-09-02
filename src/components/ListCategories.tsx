@@ -24,7 +24,7 @@ const ListCategories = () => {
   }
 
   return (
-    <div className="sticky top-12 left-0 z-20 glass">
+    <div className="sticky top-12 left-0 z-20 bg-white">
       <div className=" mt-2 flex flex-row gap-2 w-full overflow-x-scroll p-2 ">
         {getCategory ? (
           <button

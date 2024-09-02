@@ -75,7 +75,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
         <img
           className="h-200 sm:h-100 rounded object-cover"
           src={url}
-          alt={"Image lost"}
+          alt={p.name}
         />
       </figure>
       <div className="flex w-full flex-col gap-2">
