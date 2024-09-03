@@ -44,11 +44,7 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove, immutableMode }) => {
     >
       <div className="flex flex-col">
         <figure className="w-full m-auto rounded  mt-1">
-          <img
-            className="h-100 rounded object-cover"
-            src={url}
-            alt={"Image lost"}
-          />
+          <img className="h-100 rounded object-cover" src={url} alt={p.name} />
         </figure>
         <div className="font-bold">
           <input
