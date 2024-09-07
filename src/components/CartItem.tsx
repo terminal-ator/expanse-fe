@@ -35,7 +35,7 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove, immutableMode }) => {
   //   };
   const { addItem } = useCartStore();
   const imageName = p.images[0];
-  const url = pb.files.getUrl(p, imageName, { thumb: "100x100" });
+  const url = imageName ? pb.files.getUrl(p, imageName, { thumb: "100x100" }) : null;
 
   return (
     <div
@@ -44,7 +44,17 @@ const CartItem: FC<ICartItem> = ({ p, quantity, onRemove, immutableMode }) => {
     >
       <div className="flex flex-col">
         <figure className="w-full m-auto rounded  mt-1">
-          <img className="h-100 rounded object-cover" src={url} alt={p.name} />
+        {url ? (
+          <img
+            className="h-200 sm:h-100 rounded object-cover"
+            src={url}
+            alt={p.name}
+          />
+        ) : (
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="m 4 1 c -1.644531 0 -3 1.355469 -3 3 v 1 h 1 v -1 c 0 -1.109375 0.890625 -2 2 -2 h 1 v -1 z m 2 0 v 1 h 4 v -1 z m 5 0 v 1 h 1 c 1.109375 0 2 0.890625 2 2 v 1 h 1 v -1 c 0 -1.644531 -1.355469 -3 -3 -3 z m -5 4 c -0.550781 0 -1 0.449219 -1 1 s 0.449219 1 1 1 s 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m -5 1 v 4 h 1 v -4 z m 13 0 v 4 h 1 v -4 z m -4.5 2 l -2 2 l -1.5 -1 l -2 2 v 0.5 c 0 0.5 0.5 0.5 0.5 0.5 h 7 s 0.472656 -0.035156 0.5 -0.5 v -1 z m -8.5 3 v 1 c 0 1.644531 1.355469 3 3 3 h 1 v -1 h -1 c -1.109375 0 -2 -0.890625 -2 -2 v -1 z m 13 0 v 1 c 0 1.109375 -0.890625 2 -2 2 h -1 v 1 h 1 c 1.644531 0 3 -1.355469 3 -3 v -1 z m -8 3 v 1 h 4 v -1 z m 0 0" fill="#2e3434" fill-opacity="0.34902"/>
+      </svg>
+        )}
         </figure>
         <div className="font-bold">
           <input

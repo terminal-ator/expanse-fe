@@ -5,6 +5,13 @@ import pb from "../pb";
 import { useCartStore } from "../store";
 import { CartItem, Product } from "../types";
 import posthog from "posthog-js";
+ // Assume this utility function exists
+ function getRandomGradient(): string {
+  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+  const color1 = colors[Math.floor(Math.random() * colors.length)];
+  const color2 = colors[Math.floor(Math.random() * colors.length)];
+  return `linear-gradient(45deg, ${color1}, ${color2})`;
+}
 
 interface IProductItem {
   p: Product;
@@ -64,20 +71,26 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
   };
 
   const imageName = p.images[0];
-  const url = pb.files.getUrl(p, imageName, { thumb: "200x200" });
+  const url = imageName ? pb.files.getUrl(p, imageName, { thumb: "200x200" }) : null;
 
   return (
     <div
       key={p.id}
       className="flex w-full sm:min-w-32  border-b-2 sm:border-none sm:min-h-52 sm:flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
     >
-      <figure className="w-full m-auto rounded  mt-1">
-        <img
-          className="h-200 sm:h-100 rounded object-cover"
-          src={url}
-          alt={p.name}
-        />
-      </figure>
+      <div className="w-full h-full m-auto rounded mt-1 p-2">
+        {url ? (
+          <img
+            className="h-200 sm:h-100 rounded object-cover"
+            src={url}
+            alt={p.name}
+          />
+        ) : (
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="m 4 1 c -1.644531 0 -3 1.355469 -3 3 v 1 h 1 v -1 c 0 -1.109375 0.890625 -2 2 -2 h 1 v -1 z m 2 0 v 1 h 4 v -1 z m 5 0 v 1 h 1 c 1.109375 0 2 0.890625 2 2 v 1 h 1 v -1 c 0 -1.644531 -1.355469 -3 -3 -3 z m -5 4 c -0.550781 0 -1 0.449219 -1 1 s 0.449219 1 1 1 s 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m -5 1 v 4 h 1 v -4 z m 13 0 v 4 h 1 v -4 z m -4.5 2 l -2 2 l -1.5 -1 l -2 2 v 0.5 c 0 0.5 0.5 0.5 0.5 0.5 h 7 s 0.472656 -0.035156 0.5 -0.5 v -1 z m -8.5 3 v 1 c 0 1.644531 1.355469 3 3 3 h 1 v -1 h -1 c -1.109375 0 -2 -0.890625 -2 -2 v -1 z m 13 0 v 1 c 0 1.109375 -0.890625 2 -2 2 h -1 v 1 h 1 c 1.644531 0 3 -1.355469 3 -3 v -1 z m -8 3 v 1 h 4 v -1 z m 0 0" fill="#2e3434" fill-opacity="0.34902"/>
+      </svg>
+        )}
+      </div>
       <div className="flex w-full flex-col gap-2">
         <span className="font-bold min-h-11  w-full overflow-x-hidden">
           {p.name}
