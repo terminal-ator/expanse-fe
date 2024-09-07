@@ -1,5 +1,5 @@
 import React from "react";
-import { useMutation, useQueries, useQuery } from "react-query";
+import { useMutation, useQueries,  } from "react-query";
 import { useLocation, useParams } from "wouter";
 import pb from "./pb";
 import { CartItem as ICartItem } from "./types";
