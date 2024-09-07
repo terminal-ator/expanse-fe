@@ -76,12 +76,12 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
   return (
     <div
       key={p.id}
-      className="flex w-full sm:min-w-32  border-b-2 sm:border-none sm:min-h-52 sm:flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
+      className="flex w-full sm:min-w-32 overflow-y-hidden  border-b-2 sm:border-none sm:min-h-52 sm:flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
     >
       <div className="w-full h-full m-auto rounded mt-1 p-2">
         {url ? (
           <img
-            className="h-200 sm:h-100 rounded object-cover"
+            className="h-100 sm:h-100 rounded object-cover"
             src={url}
             alt={p.name}
           />
