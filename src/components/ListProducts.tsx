@@ -41,7 +41,7 @@ const ListProducts = () => {
     );
 
   return (
-    <div className="flex flex-col p-2">
+    <div className="flex flex-col pt-8">
       <h1 className=" font-bold text-2xl">
         {params?.name ? params?.name?.toUpperCase() : "Featured"}
       </h1>

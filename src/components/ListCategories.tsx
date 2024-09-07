@@ -29,8 +29,7 @@ const ListCategories = () => {
 
   return (
     <div className="sticky top-12 left-0 z-20 bg-white">
-      <div className=" mt-6 flex flex-row gap-2 w-full overflow-x-scroll p-2 ">
-        
+      <div className="relative top-4 flex flex-row gap-2 w-full overflow-x-scroll p-2  bg-white"> 
         {data?.map((c) => (
           <button
             key={c.id}
