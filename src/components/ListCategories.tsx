@@ -28,8 +28,8 @@ const ListCategories = () => {
   }
 
   return (
-    <div className="sticky top-12 left-0 z-20 bg-white h-full relative">
-      <div className={`relative top-4 flex flex-row flex sm:flex-wrap gap-2 w-full overflow-x-scroll p-2  bg-white ${showAll ? "flex-wrap" : ""}`}> 
+    <div className="sticky top-12 left-0 z-20 bg-white pt-8 p-2 border-b border-gray-200">
+      <div className={`top-4 flex flex-row flex sm:flex-wrap gap-2 w-full overflow-x-scroll p-2  bg-white ${showAll ? "flex-wrap" : ""}`}> 
         {data?.map((c) => (
           <button
             key={c.id}
@@ -47,7 +47,7 @@ const ListCategories = () => {
           </button>
         ))}
       </div>
-      <button className="btn btn-sm  relative top-4 left-2" onClick={() => setShowAll(!showAll)}>{showAll ? "Show Less" : "View All Categories"}</button>
+      <button className="btn btn-sm mt-2" onClick={() => setShowAll(!showAll)}>{showAll ? "Show Less" : "View All Categories"}</button>
     </div>
   );
 };
