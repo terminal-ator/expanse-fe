@@ -15,28 +15,35 @@ const ListOrders = () => {
 
   if (isLoading) {
     return (
-      <div className="pt-2">
-        <div className="loading"></div>
+      <div className="flex justify-center items-center h-screen">
+        <div className="loading loading-spinner loading-lg"></div>
       </div>
     );
   }
+
   return (
-    <div className="container">
-      <h2 className="font-extrabold">Your Orders</h2>
-      {orders
-        ? orders.map((o) => (
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-extrabold mb-6">Your Orders</h2>
+      {orders && orders.length > 0 ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {orders.map((o) => (
             <Link key={o.id} href={`/order/${o.id}`}>
-              <div className="card my-2 rounded-xl bordered p-2">
-                <div>
-                  <p className="badge badge-primary">{o.id}</p>
-                  <p className="badge ">{o.order_status}</p>
-                  <p>Ordered: {o.created}</p>
-                  <p>Amount:₹ {o.order_amount}</p>
+              <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                <div className="card-body">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="badge badge-primary">{o.id}</span>
+                    <span className="badge badge-outline">{o.order_status}</span>
+                  </div>
+                  <p className="text-sm text-gray-500">Ordered: {new Date(o.created).toLocaleString()}</p>
+                  <p className="text-lg font-semibold mt-2">Amount: ₹{o.order_amount.toFixed(2)}</p>
                 </div>
               </div>
             </Link>
-          ))
-        : "You have no orders"}
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-gray-500">You have no orders</div>
+      )}
     </div>
   );
 };
