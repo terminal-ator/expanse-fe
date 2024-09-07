@@ -39,4 +39,10 @@ export interface IOrder {
   is_complete: boolean;
   at_address: IAddress;
   created: string;
+  expand: {
+    orderlines_via_of_order: {
+      id: string;
+      expand: { of_product: Product };
+    }[];
+  };
 }
