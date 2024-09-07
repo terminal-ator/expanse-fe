@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { categoryAtom } from "../atom";
 import pb from "../pb";
@@ -7,15 +7,15 @@ import { Category } from "../types";
 import { useLocation, useRoute } from "wouter";
 
 const ListCategories = () => {
-  const setCategory = useSetAtom(categoryAtom);
-  const getCategory = useAtomValue(categoryAtom);
+
   const [ location, setLocation ]= useLocation();
   const [_, params ] = useRoute("/category/:id/:name")
+  const [ showAll, setShowAll] = useState(false);
   const { data, isLoading } = useQuery("categories", () =>
     pb.collection("categories").getFullList<Category>({ sort: "name" })
   );
   const selectCategory = (c: Category) => {
-    setCategory(c);
+  
     setLocation(`/category/${c.id}/${c.name}`);
   };
 
@@ -28,8 +28,8 @@ const ListCategories = () => {
   }
 
   return (
-    <div className="sticky top-12 left-0 z-20 bg-white">
-      <div className="relative top-4 flex flex-row gap-2 w-full overflow-x-scroll p-2  bg-white"> 
+    <div className="sticky top-12 left-0 z-20 bg-white h-full relative">
+      <div className={`relative top-4 flex flex-row flex sm:flex-wrap gap-2 w-full overflow-x-scroll p-2  bg-white ${showAll ? "flex-wrap" : ""}`}> 
         {data?.map((c) => (
           <button
             key={c.id}
@@ -47,6 +47,7 @@ const ListCategories = () => {
           </button>
         ))}
       </div>
+      <button className="btn btn-sm  relative top-4 left-2" onClick={() => setShowAll(!showAll)}>{showAll ? "Show Less" : "View All Categories"}</button>
     </div>
   );
 };
