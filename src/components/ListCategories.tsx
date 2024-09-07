@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { categoryAtom } from "../atom";
 import pb from "../pb";
 import { Category } from "../types";
-import { useLocation, useRoute } from "wouter";
+import { Link, useLocation, useRoute } from "wouter";
 
 const ListCategories = () => {
 
@@ -14,11 +14,7 @@ const ListCategories = () => {
   const { data, isLoading } = useQuery("categories", () =>
     pb.collection("categories").getFullList<Category>({ sort: "name" })
   );
-  const selectCategory = (c: Category) => {
-  
-    setLocation(`/category/${c.id}/${c.name}`);
-  };
-
+ 
   useEffect(() => {
     // if (data) setCategory(data[0]);
   }, [data]);
@@ -28,9 +24,10 @@ const ListCategories = () => {
   }
 
   return (
-    <div className="sticky top-12 left-0 z-20 bg-white pt-8 p-2 border-b border-gray-200">
-      <div className={`top-4 flex flex-row flex sm:flex-wrap gap-2 w-full overflow-x-scroll p-2  bg-white ${showAll ? "flex-wrap" : ""}`}> 
+    <div className="sticky top-12 left-0 z-20 bg-white pt-4 p-2 border-b border-gray-200">
+      <div className={`top-2 flex flex-row flex sm:flex-wrap gap-2 w-full overflow-x-scroll p-2  bg-white ${showAll ? "flex-wrap" : ""}`}> 
         {data?.map((c) => (
+          <Link href={`/category/${c.id}/${c.name}`} >
           <button
             key={c.id}
             id={c.id}
@@ -39,14 +36,14 @@ const ListCategories = () => {
                 ? " btn-neutral"
                 : "btn-outline"
             } `}
-            onClick={() => {
-              selectCategory(c);
-            }}
+           
           >
             {c.name.toUpperCase()}
           </button>
+          </Link>
         ))}
       </div>
+      
       <button className="btn btn-sm mt-2" onClick={() => setShowAll(!showAll)}>{showAll ? "Show Less" : "View All Categories"}</button>
     </div>
   );
