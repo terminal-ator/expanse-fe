@@ -28,7 +28,7 @@ const ListOrders = () => {
       {orders && orders.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {orders.map((o) => (
-            <Link key={o.id} href={`/order/${o.id}`}>
+            <Link key={o.id} href={`/order/${o.id}`} asChild>
               <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
                 <div className="card-body">
                   <div className="flex justify-between items-center mb-2">
@@ -36,7 +36,7 @@ const ListOrders = () => {
                     <span className="badge badge-outline">{o.order_status}</span>
                   </div>
                   <p className="text-sm text-gray-500">Ordered: {new Date(o.created).toLocaleString()}</p>
-                  <ul className="list-none p-0 flex flex-row w-full overflow-x-scroll">
+                  <ul className="list-none p-0 flex flex-row w-[300px] overflow-x-scroll">
                     {o.expand?.orderlines_via_of_order?.map((ol) => (
                       <li key={ol.id}>
                         <SmallOrderImage product={ol.expand?.of_product} />
