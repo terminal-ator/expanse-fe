@@ -5,17 +5,20 @@ import { categoryAtom } from "../atom";
 import pb from "../pb";
 import { Product } from "../types";
 import ProductItem from "./ProductItem";
+import { useRoute } from "wouter";
 
 const ListProducts = () => {
-  const selectedcategory = useAtomValue(categoryAtom);
-
+  const [_, params ] = useRoute("/category/:id/:name")
+ 
   const fetchProductsOfCategory = async () => {
-    if (selectedcategory) {
+    console.log({params})
+    if (params?.id) {
       return await pb.collection("products").getFullList<Product>({
-        filter: `category.id?="${selectedcategory?.id}"`,
+        filter: `category.id?="${params?.id}"`,
         sort: "name",
       });
     } else {
+      console.log({ " no params found": "wow"})
       const prods = await pb.collection("products").getList<Product>(1, 30, {
         filter: "featured = true",
         sort: "name",
@@ -25,7 +28,7 @@ const ListProducts = () => {
   };
 
   const { data, error, isLoading } = useQuery(
-    ["products", selectedcategory],
+    ["products", params?.id],
     fetchProductsOfCategory
   );
 
@@ -40,7 +43,7 @@ const ListProducts = () => {
   return (
     <div className="flex flex-col p-2">
       <h1 className=" font-bold text-2xl">
-        {selectedcategory ? selectedcategory.name : "Featured"}
+        {params?.name ? params?.name?.toUpperCase() : "Featured"}
       </h1>
       <div className="flex flex-row  w-full flex-wrap gap-2  overflow-x-scroll sm:overflow-x-hidden">
         {data ? (

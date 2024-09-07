@@ -5,6 +5,7 @@ import pb from "./pb";
 
 import ListCategories from "./components/ListCategories";
 import ListProducts from "./components/ListProducts";
+import { Route } from "wouter";
 
 function Home() {
   const [, setUser] = useState("");
@@ -29,7 +30,7 @@ function Home() {
   };
 
   return (
-    <div className="p-2 ">
+    <div className="p-2">
       <h3 className="text-lg ">
         Buy products at wholesale rate.
         <button
@@ -43,7 +44,8 @@ function Home() {
       </h3>
 
       <ListCategories />
-      <ListProducts />
+      <Route path="/category/:id/:name" component={ListProducts} />
+      <Route path="/" component={ListProducts} />
     </div>
   );
 }

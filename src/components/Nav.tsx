@@ -33,7 +33,7 @@ function NavBar() {
   return (
     <nav className="shadow-md p-2 z-40 bg-white fixed top-0   flex justify-between items-center  w-full sm:m-auto  ">
       <div className="flex items-center gap-4">
-        <Link className="text-2xl font-normal text-red-500" href="/">
+        <Link className="text-2xl font-normal text-red-500" href="/" >
           Good<span className="font-bold">Deal.</span>
         </Link>
         <div>

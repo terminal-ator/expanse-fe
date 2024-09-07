@@ -8,6 +8,8 @@ import OrderStatusPage from "./OrderSuccess";
 import OrderDetail from "./OrderDetail";
 import StartPage from "./Start";
 import { usePincodeStore } from "./store";
+import FeaturedProducts from "./Featured";
+import ListProducts from "./components/ListProducts";
 
 function App() {
   const { pincode } = usePincodeStore();
@@ -25,7 +27,10 @@ function App() {
       <NavBar />
       <div className="mt-16">
         <Switch>
-          <Route path="/" component={Home} />
+          <Route path="/" component={FeaturedProducts} />
+          <Route path="/app" component={Home} nest>
+            
+          </Route>
           <Route path="/cart" component={Cart} />
           <Route path="/login" component={LoginPage} />
           <Route path="/profile" component={ProfilePage} />
