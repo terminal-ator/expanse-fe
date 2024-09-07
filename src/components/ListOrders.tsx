@@ -2,16 +2,17 @@ import { useQuery } from "react-query";
 import pb from "../pb";
 import { IOrder } from "../types";
 import { Link } from "wouter";
+import SmallOrderImage from "./SmallOrderImage";
 
 const ListOrders = () => {
   const { data: orders, isLoading } = useQuery("orders", () =>
     pb.collection("orders").getFullList<IOrder>({
       sort: "-created",
-      expand: "at_address, of_user, orderlines_via_of_order",
+      expand: "at_address, of_user, orderlines_via_of_order.of_product,",
     })
   );
 
-  // console.log({ orders });
+  console.log({ orders });
 
   if (isLoading) {
     return (
@@ -35,6 +36,13 @@ const ListOrders = () => {
                     <span className="badge badge-outline">{o.order_status}</span>
                   </div>
                   <p className="text-sm text-gray-500">Ordered: {new Date(o.created).toLocaleString()}</p>
+                  <ul className="list-none p-0 flex flex-row w-full overflow-x-scroll">
+                    {o.expand?.orderlines_via_of_order?.map((ol) => (
+                      <li key={ol.id}>
+                        <SmallOrderImage product={ol.expand?.of_product} />
+                      </li>
+                    ))}
+                  </ul>
                   <p className="text-lg font-semibold mt-2">Amount: ₹{o.order_amount.toFixed(2)}</p>
                 </div>
               </div>
