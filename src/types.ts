@@ -4,6 +4,7 @@ export interface Product {
   amount_1: number;
   amount_2: number;
   images: string[];
+  description?: string;
 }
 
 export interface Category {
