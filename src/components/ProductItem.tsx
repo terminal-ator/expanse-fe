@@ -76,43 +76,40 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
   return (
     <div
       key={p.id}
-      className="flex w-full sm:min-w-32 overflow-y-hidden  border-b-2 sm:border-none sm:min-h-52 sm:flex-col align-middle p-2 pt-0 pb-2 mt-4 bg-base-100 sm:w-48 overflow-x-hidden"
+      className="flex w-full sm:w-64 overflow-hidden border border-gray-200 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md bg-white sm:flex-col p-3 sm:p-4  sm:mb-6"
     >
-      <div className="w-full h-full m-auto rounded mt-1 p-2">
+      <div className="w-1/3 sm:w-full h-full m-auto rounded overflow-hidden">
         {url ? (
           <img
-            className="h-100 sm:h-100 rounded object-cover"
+            className="h-24 sm:h-40 w-full object-cover transition-transform duration-300 hover:scale-105"
             src={url}
             alt={p.name}
           />
         ) : (
-          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-          <path d="m 4 1 c -1.644531 0 -3 1.355469 -3 3 v 1 h 1 v -1 c 0 -1.109375 0.890625 -2 2 -2 h 1 v -1 z m 2 0 v 1 h 4 v -1 z m 5 0 v 1 h 1 c 1.109375 0 2 0.890625 2 2 v 1 h 1 v -1 c 0 -1.644531 -1.355469 -3 -3 -3 z m -5 4 c -0.550781 0 -1 0.449219 -1 1 s 0.449219 1 1 1 s 1 -0.449219 1 -1 s -0.449219 -1 -1 -1 z m -5 1 v 4 h 1 v -4 z m 13 0 v 4 h 1 v -4 z m -4.5 2 l -2 2 l -1.5 -1 l -2 2 v 0.5 c 0 0.5 0.5 0.5 0.5 0.5 h 7 s 0.472656 -0.035156 0.5 -0.5 v -1 z m -8.5 3 v 1 c 0 1.644531 1.355469 3 3 3 h 1 v -1 h -1 c -1.109375 0 -2 -0.890625 -2 -2 v -1 z m 13 0 v 1 c 0 1.109375 -0.890625 2 -2 2 h -1 v 1 h 1 c 1.644531 0 3 -1.355469 3 -3 v -1 z m -8 3 v 1 h 4 v -1 z m 0 0" fill="#2e3434" fill-opacity="0.34902"/>
-      </svg>
+          <img
+            className="h-24 sm:h-40 w-full object-cover transition-transform duration-300 hover:scale-105"
+            src={'/product.png'}
+            alt={p.name}
+          />
         )}
       </div>
-      <div className="flex w-full flex-col gap-2">
-        <span className="font-bold min-h-11  w-full overflow-x-hidden">
+      <div className="flex w-2/3 sm:w-full flex-col gap-2 sm:gap-3 ml-3 sm:ml-0 sm:mt-3">
+        <h3 className="font-semibold text-sm sm:text-base line-clamp-2 text-gray-800">
           {p.name}
-        </span>
-        <div className=" mt-2 justify-start">
+        </h3>
+        <div className="mt-auto">
           {pb.authStore.isValid ? (
             <div>
-              <div className="">Mrp: ₹ {p.amount_1}</div>
-              <div className="">Price: ₹ {p.amount_2}</div>
+              <div className="text-xs sm:text-sm text-gray-500">MRP: <span className="line-through">₹{p.amount_1}</span></div>
+              <div className="text-sm sm:text-base font-medium text-gray-900">Price: ₹{p.amount_2}</div>
 
-              <form className="flex w-full   gap-4" onSubmit={handleSave}>
+              <form className="flex w-full gap-2 mt-2" onSubmit={handleSave}>
                 <input
                   required
-                  className="input input-sm  input-bordered w-1/2"
+                  className="input input-sm input-bordered w-1/2 focus:ring-2 focus:ring-primary"
                   value={quant}
                   disabled={addCartMutation.isLoading}
                   onChange={(e) => {
-                    // if(e.target.value == "") return;
-                    // if (e.target.value == "") {
-                    //   setQuant(0);
-                    //   return;
-                    // }
                     setQuant(parseInt(e.target.value));
                   }}
                   onFocus={(e) => {
@@ -124,7 +121,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
                 <button
                   disabled={addCartMutation.isLoading}
                   type={"submit"}
-                  className="btn btn-sm rounded-3xl"
+                  className="btn btn-sm btn-primary rounded-md text-white hover:opacity-90 transition-opacity duration-300"
                   value={"add"}
                 >
                   {addCartMutation.isLoading ? (
@@ -136,9 +133,9 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
               </form>
             </div>
           ) : (
-            <div>
+            <div className="text-sm text-gray-600">
               To view prices and add to cart, please
-              <Link className={"link ml-1"} href="/login">
+              <Link className="link link-primary ml-1 font-medium" href="/login">
                 login
               </Link>
             </div>
@@ -146,12 +143,11 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
         </div>
         <div>
           {cart[p.id] ? (
-            <div className="badge badge-primary p-2">
-              {" "}
-              {`${cart[p.id].quantity} in cart`}{" "}
+            <div className="badge badge-primary badge-sm p-2 text-xs">
+              {`${cart[p.id].quantity} in cart`}
             </div>
           ) : (
-            <div className="badge p-2 invisible"></div>
+            <div className="h-6"></div>
           )}
         </div>
       </div>
