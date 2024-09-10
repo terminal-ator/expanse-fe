@@ -84,7 +84,9 @@ const Cart = () => {
     // delete cart
   };
 
-  const placeOrderMutation = useMutation({ mutationFn: placeOrder });
+  const placeOrderMutation = useMutation({ mutationFn: placeOrder, onError: (err)=>{
+    console.log({ err });
+  } });
 
   if (!pb.authStore.isValid) {
     return <div className="p-2">Please login to view your cart</div>;
