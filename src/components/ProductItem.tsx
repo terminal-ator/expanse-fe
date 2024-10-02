@@ -5,9 +5,16 @@ import pb from "../pb";
 import { useCartStore } from "../store";
 import { CartItem, Product } from "../types";
 import posthog from "posthog-js";
- // Assume this utility function exists
- function getRandomGradient(): string {
-  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+// Assume this utility function exists
+function getRandomGradient(): string {
+  const colors = [
+    "#ff0000",
+    "#00ff00",
+    "#0000ff",
+    "#ffff00",
+    "#ff00ff",
+    "#00ffff",
+  ];
   const color1 = colors[Math.floor(Math.random() * colors.length)];
   const color2 = colors[Math.floor(Math.random() * colors.length)];
   return `linear-gradient(45deg, ${color1}, ${color2})`;
@@ -17,12 +24,13 @@ interface IProductItem {
   p: Product;
 }
 const ProductItem: FC<IProductItem> = ({ p }) => {
-  const [quant, setQuant] = useState(1); // get state from store;
+  const [quant, setQuant] = useState(p.recommended == 0 ? 1 : p.recommended); // get state from store;
   const [added, setAdded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   // const { changeStatus } = useCartStore();
   const addItem = useCartStore((s) => s.addItem);
   const cart = useCartStore((s) => s.cart);
+  const removeItem = useCartStore((s) => s.deleteItem);
 
   const addToCart = async () => {
     // const user_id: string = pb.authStore.model?.id;
@@ -72,20 +80,31 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
   };
 
   const imageName = p.images[0];
-  const url = imageName ? pb.files.getUrl(p, imageName, { thumb: "200x200" }) : null;
+  const url = imageName
+    ? pb.files.getUrl(p, imageName, { thumb: "200x200" })
+    : null;
 
   // Calculate the amount saved
   const amountSaved = Math.round(p.amount_1 - p.amount_2);
-  const percentSaved = Math.round((amountSaved / p.amount_1) * 100);
+  // const percentSaved = Math.round((amountSaved / p.amount_1) * 100);
+
+  const removeFromCart = async () => {
+    removeItem(p.id);
+    posthog.capture("product removed", { p });
+  };
+
+  const removeCartMutation = useMutation({ mutationFn: removeFromCart });
 
   return (
     <>
       <div
         key={p.id}
         className="flex w-full sm:w-64 overflow-hidden border border-gray-200 rounded-lg shadow-sm transition-all duration-300 hover:shadow-md bg-white sm:flex-col p-3 sm:p-4 sm:mb-6 cursor-pointer"
-        
       >
-        <div onClick={() => setShowModal(true)} className="w-1/3 sm:w-full h-full m-auto rounded overflow-hidden relative">
+        <div
+          onClick={() => setShowModal(true)}
+          className="w-1/3 sm:w-full h-full m-auto rounded overflow-hidden relative"
+        >
           {url ? (
             <img
               className="h-24 sm:h-40 w-full object-cover transition-transform duration-300 hover:scale-105"
@@ -95,7 +114,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
           ) : (
             <img
               className="h-24 sm:h-40 w-full object-cover transition-transform duration-300 hover:scale-105"
-              src={'/product.png'}
+              src={"/product.png"}
               alt={p.name}
             />
           )}
@@ -104,21 +123,29 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
               {`${cart[p.id].quantity} in cart`}
             </div>
           )}
-          {amountSaved > 0 && (
-            <div className="absolute bottom-0 left-0 right-0 bg-green-600 text-white p-1 text-xs text-center">
-              Save ₹{amountSaved} ({percentSaved}% off)
-            </div>
-          )}
         </div>
-        <div  className="flex w-2/3 sm:w-full flex-col gap-2 sm:gap-3 ml-3 sm:ml-0 sm:mt-3">
-          <h3 onClick={() => setShowModal(true)} className="font-semibold text-sm sm:text-base truncate text-gray-800" title={p.name}>
+        <div className="flex w-2/3 sm:w-full flex-col gap-2 sm:gap-3 ml-3 sm:ml-0 sm:mt-3">
+          <h3
+            onClick={() => setShowModal(true)}
+            className="font-semibold text-sm sm:text-base truncate text-gray-800"
+            title={p.name}
+          >
             {p.name}
           </h3>
           <div className="mt-auto">
             {pb.authStore.isValid ? (
               <div>
-                <div className="text-xs sm:text-sm text-gray-500">MRP: <span className="line-through">₹{p.amount_1}</span></div>
-                <div className="text-sm sm:text-base font-medium text-gray-900">Price: ₹{p.amount_2}</div>
+                <div className="text-xs sm:text-sm text-gray-500">
+                  MRP: <span className="line-through">₹{p.amount_1}</span>
+                </div>
+                <div className="text-sm sm:text-base font-medium text-gray-900">
+                  Price: ₹{p.amount_2}{" "}
+                  {amountSaved > 0 && pb.authStore.isValid && (
+                    <div className="relative bottom-0 left-0  w-1/2 bg-green-600 text-white p-1 text-xs text-center">
+                      Save ₹{amountSaved}
+                    </div>
+                  )}
+                </div>
 
                 <form className="flex w-full gap-2 mt-2" onSubmit={handleSave}>
                   <input
@@ -152,9 +179,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
             ) : (
               <div className="text-sm text-gray-600">
                 To view prices and add to cart, please
-                <Link className="link link-primary ml-1 font-medium" href="/login">
-                  login
-                </Link>
+                <span className=" ml-1 font-medium">login</span>
               </div>
             )}
           </div>
@@ -167,7 +192,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
             <h2 className="text-2xl font-bold mb-4">{p.name}</h2>
             <div className="relative">
               <img
-                src={url || '/product.png'}
+                src={url || "/product.png"}
                 alt={p.name}
                 className="w-full h-64 object-cover mb-4 rounded"
               />
@@ -181,11 +206,13 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <p className="text-lg font-semibold">₹{p.amount_2}</p>
-                {amountSaved > 0 && (
-                  <p className="text-sm text-green-600">
-                    Save ₹{amountSaved} ({percentSaved}% off)
-                  </p>
-                )}
+                {pb.authStore.isValid
+                  ? amountSaved > 0 && (
+                      <p className="text-sm text-green-600">
+                        Save ₹{amountSaved}
+                      </p>
+                    )
+                  : null}
               </div>
               {pb.authStore.isValid && (
                 <form className="flex gap-2" onSubmit={handleSave}>
@@ -201,7 +228,7 @@ const ProductItem: FC<IProductItem> = ({ p }) => {
                     className="btn btn-sm btn-primary"
                     disabled={addCartMutation.isLoading}
                   >
-                    {addCartMutation.isLoading ? 'Adding...' : 'Add to Cart'}
+                    {addCartMutation.isLoading ? "Adding..." : "Add to Cart"}
                   </button>
                 </form>
               )}

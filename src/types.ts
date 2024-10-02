@@ -5,6 +5,7 @@ export interface Product {
   amount_2: number;
   images: string[];
   description?: string;
+  recommended: number;
 }
 
 export interface Category {
